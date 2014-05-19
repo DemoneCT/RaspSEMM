@@ -63,7 +63,18 @@ public class MainActivity extends ActionBarActivity
                 (DrawerLayout) findViewById(R.id.drawer_layout));
 
         list = (ListView)findViewById(R.id.listView1);
+
         mainWifiObj = (WifiManager) getSystemService(Context.WIFI_SERVICE);
+
+        // Check for wifi is disabled
+        if (mainWifiObj.isWifiEnabled() == false) {
+            // If wifi disabled then enable it
+            Toast.makeText(getApplicationContext(), "wifi is disabled..making it enabled",
+                    Toast.LENGTH_LONG).show();
+
+            mainWifiObj.setWifiEnabled(true);
+        }
+
         wifiReciever = new WifiScanReceiver();
         mainWifiObj.startScan();
     }
