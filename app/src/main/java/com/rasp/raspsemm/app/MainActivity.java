@@ -194,7 +194,7 @@ public class MainActivity extends ActionBarActivity
             List<ScanResult> wifiScanList = mainWifiObj.getScanResults();
             wifis = new String[wifiScanList.size()];
             for(int i = 0; i < wifiScanList.size(); i++){
-                wifis[i] = ((wifiScanList.get(i)).toString());
+                wifis[i] = (wifiScanList.get(i).SSID);
             }
 
             list.setAdapter(new ArrayAdapter<String>(getApplicationContext(),
