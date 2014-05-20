@@ -15,6 +15,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.support.v4.widget.DrawerLayout;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
@@ -37,7 +38,6 @@ public class MainActivity extends ActionBarActivity
     ListView list;
     String wifis[];
 
-
     /**
      * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
      */
@@ -52,7 +52,6 @@ public class MainActivity extends ActionBarActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
 
         mNavigationDrawerFragment = (NavigationDrawerFragment)
                 getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
@@ -78,6 +77,20 @@ public class MainActivity extends ActionBarActivity
 
         wifiReciever = new WifiScanReceiver();
         mainWifiObj.startScan();
+        list.setClickable(true);
+
+
+        list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            public void onItemClick(AdapterView<?> parent, View view,
+                                    int position, long id) {
+
+                Object o = list.getItemAtPosition(position);
+                String str=(String)o;
+                Toast.makeText(getBaseContext(),str,Toast.LENGTH_SHORT).show();
+            }
+        });
+
+
     }
 
 
