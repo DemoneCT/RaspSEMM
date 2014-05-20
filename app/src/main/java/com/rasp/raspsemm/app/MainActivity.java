@@ -21,12 +21,15 @@ import android.widget.TextView;
 
 
 import java.util.List;
+
+import android.util.Log;
 import android.annotation.SuppressLint;
 import android.content.BroadcastReceiver;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.wifi.ScanResult;
 import android.net.wifi.WifiManager;
+import android.net.wifi.WifiConfiguration;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -86,7 +89,33 @@ public class MainActivity extends ActionBarActivity
 
                 Object o = list.getItemAtPosition(position);
                 String str=(String)o;
-                Toast.makeText(getBaseContext(),str,Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getBaseContext(),str,Toast.LENGTH_SHORT).show();
+                //if (o.toString() == "semm") {
+
+
+
+                    WifiConfiguration wc = new WifiConfiguration();
+                    wc.SSID = "\"semm\"";
+                    wc.preSharedKey  = "\"raspberry\"";
+                    wc.hiddenSSID = true;
+                    wc.status = WifiConfiguration.Status.ENABLED;
+                    wc.allowedGroupCiphers.set(WifiConfiguration.GroupCipher.TKIP);
+                    wc.allowedGroupCiphers.set(WifiConfiguration.GroupCipher.CCMP);
+                    wc.allowedKeyManagement.set(WifiConfiguration.KeyMgmt.WPA_PSK);
+                    wc.allowedPairwiseCiphers.set(WifiConfiguration.PairwiseCipher.TKIP);
+                    wc.allowedPairwiseCiphers.set(WifiConfiguration.PairwiseCipher.CCMP);
+                    wc.allowedProtocols.set(WifiConfiguration.Protocol.RSN);
+                    int res = mainWifiObj.addNetwork(wc);
+                    Log.v("WifiPreference", "add Network returned " + res );
+                    boolean b = mainWifiObj.enableNetwork(res, true);
+                    Log.v("WifiPreference", "enableNetwork returned " + b );
+
+
+
+
+                //}
+                //else
+                  //  Log.v("MAH", "MAH");
             }
         });
 
