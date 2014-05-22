@@ -20,6 +20,7 @@ import android.view.ViewGroup;
 import android.support.v4.widget.DrawerLayout;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import java.util.List;
@@ -50,6 +51,9 @@ public class MainActivity extends ActionBarActivity
     ListView list;
     String wifis[];
 
+
+    Intent loginIntent;
+
     /**
      * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
      */
@@ -77,6 +81,8 @@ public class MainActivity extends ActionBarActivity
         list = (ListView)findViewById(R.id.listView1);
 
         mainWifiObj = (WifiManager) getSystemService(Context.WIFI_SERVICE);
+
+        loginIntent = new Intent(this, OutputActivity.class);
 
         // Check for wifi is disabled
         if (mainWifiObj.isWifiEnabled() == false) {
@@ -133,12 +139,27 @@ public class MainActivity extends ActionBarActivity
                     LayoutInflater inflater = (MainActivity.this).getLayoutInflater();
                     Dialog dialog = new Dialog(MainActivity.this);
                     //dialog.setTitle("LOGIN");
-                    //dialog.setContentView(R.layout.dialog_signin);
                     builder.setView(inflater.inflate(R.layout.dialog_signin, null));
                     builder.setTitle("LOGIN");
+
+
                     builder.setPositiveButton(R.string.signin, new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
                             // User clicked OK button
+
+                            Dialog f = (Dialog) dialog;
+
+                            final EditText us_et = (EditText)f.findViewById(R.id.username);
+                            final EditText pw_et = (EditText)f.findViewById(R.id.password);
+
+                            String us = us_et.getText().toString();
+                            String pw = pw_et.getText().toString();
+
+                            loginIntent.putExtra("USERNAME",us);
+                            loginIntent.putExtra("PASSWORD",pw);
+
+                            startActivity(loginIntent);
+
                         }
                     });
                     builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
