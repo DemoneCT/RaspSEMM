@@ -1,6 +1,9 @@
 package com.rasp.raspsemm.app;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBar;
 import android.support.v4.app.Fragment;
@@ -19,7 +22,6 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
-
 import java.util.List;
 
 import android.util.Log;
@@ -32,6 +34,13 @@ import android.net.wifi.WifiManager;
 import android.net.wifi.WifiConfiguration;
 import android.widget.ListView;
 import android.widget.Toast;
+
+import java.net.InetAddress;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
+
 
 public class MainActivity extends ActionBarActivity
         implements NavigationDrawerFragment.NavigationDrawerCallbacks {
@@ -72,8 +81,7 @@ public class MainActivity extends ActionBarActivity
         // Check for wifi is disabled
         if (mainWifiObj.isWifiEnabled() == false) {
             // If wifi disabled then enable it
-            Toast.makeText(getApplicationContext(), "wifi is disabled..making it enabled",
-                    Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), "Wi-fi is disabled..making it enabled", Toast.LENGTH_LONG).show();
 
             mainWifiObj.setWifiEnabled(true);
         }
@@ -90,10 +98,10 @@ public class MainActivity extends ActionBarActivity
                 Object o = list.getItemAtPosition(position);
                 String str=(String)o;
                 //Toast.makeText(getBaseContext(),str,Toast.LENGTH_SHORT).show();
-                //if (o.toString() == "semm") {
+                if (str.equals("semm")) {
 
                     WifiConfiguration wc = new WifiConfiguration();
-                        wc.SSID = "\"semm\"";
+                    wc.SSID = "\"semm\"";
                     wc.preSharedKey  = "\"raspberry\"";
                     wc.hiddenSSID = true;
                     wc.status = WifiConfiguration.Status.ENABLED;
@@ -104,7 +112,7 @@ public class MainActivity extends ActionBarActivity
                     wc.allowedPairwiseCiphers.set(WifiConfiguration.PairwiseCipher.TKIP);
                     wc.allowedPairwiseCiphers.set(WifiConfiguration.PairwiseCipher.CCMP);
                     wc.allowedProtocols.set(WifiConfiguration.Protocol.RSN);
-
+                        //TO DO If Network is already added
                     int res = mainWifiObj.addNetwork(wc);
                     Log.v("WifiPreference", "add Network returned " + res );
                     boolean b = mainWifiObj.enableNetwork(res, true);
@@ -113,19 +121,56 @@ public class MainActivity extends ActionBarActivity
                     if (android.os.Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB) {
                         // only for honeycomb and older versions
                         android.provider.Settings.System.putString(getContentResolver(), android.provider.Settings.System.WIFI_USE_STATIC_IP, "1");
-                        android.provider.Settings.System.putString(getContentResolver(), android.provider.Settings.System.WIFI_STATIC_IP, "192.168.0.100");
+                        android.provider.Settings.System.putString(getContentResolver(), android.provider.Settings.System.WIFI_STATIC_IP, "10.42.0.2");
                         android.provider.Settings.System.putString(getContentResolver(), android.provider.Settings.System.WIFI_STATIC_NETMASK, "255.255.255.0");
-                        android.provider.Settings.System.putString(getContentResolver(), android.provider.Settings.System.WIFI_STATIC_DNS1, "192.168.0.254");
-                        android.provider.Settings.System.putString(getContentResolver(), android.provider.Settings.System.WIFI_STATIC_GATEWAY, "192.168.0.254");
+                        android.provider.Settings.System.putString(getContentResolver(), android.provider.Settings.System.WIFI_STATIC_DNS1, "8.8.8.8");
+                        android.provider.Settings.System.putString(getContentResolver(), android.provider.Settings.System.WIFI_STATIC_GATEWAY, "10.42.0.1");
                     }
-                //}
-                //else
-                  //  Log.v("MAH", "MAH");
+                    else {
+                        // TO DO
+                    }
+                    AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+                    LayoutInflater inflater = (MainActivity.this).getLayoutInflater();
+                    Dialog dialog = new Dialog(MainActivity.this);
+                    //dialog.setTitle("LOGIN");
+                    //dialog.setContentView(R.layout.dialog_signin);
+                    builder.setView(inflater.inflate(R.layout.dialog_signin, null));
+                    builder.setTitle("LOGIN");
+                    builder.setPositiveButton(R.string.signin, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            // User clicked OK button
+                        }
+                    });
+                    builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            // User cancelled the dialog
+                        }
+                    });
+                    dialog = builder.create();
+                    dialog.show();
+
+
+
+                }
+                else {
+                    Toast.makeText(getBaseContext(),"Wifi not correct!",Toast.LENGTH_LONG).show();
+
+                }
+
+
+
+
             }
+
+
+
+
         });
 
 
     }
+
+
 
 
     protected void onPause() {
@@ -134,8 +179,7 @@ public class MainActivity extends ActionBarActivity
     }
 
     protected void onResume() {
-        registerReceiver(wifiReciever, new IntentFilter(
-                WifiManager.SCAN_RESULTS_AVAILABLE_ACTION));
+        registerReceiver(wifiReciever, new IntentFilter(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION));
         super.onResume();
     }
 
@@ -221,8 +265,7 @@ public class MainActivity extends ActionBarActivity
         }
 
         @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                Bundle savedInstanceState) {
+        public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.fragment_main, container, false);
             return rootView;
         }
@@ -230,8 +273,7 @@ public class MainActivity extends ActionBarActivity
         @Override
         public void onAttach(Activity activity) {
             super.onAttach(activity);
-            ((MainActivity) activity).onSectionAttached(
-                    getArguments().getInt(ARG_SECTION_NUMBER));
+            ((MainActivity) activity).onSectionAttached(getArguments().getInt(ARG_SECTION_NUMBER));
         }
     }
 
@@ -241,6 +283,7 @@ public class MainActivity extends ActionBarActivity
             List<ScanResult> wifiScanList = mainWifiObj.getScanResults();
             wifis = new String[wifiScanList.size()];
             for(int i = 0; i < wifiScanList.size(); i++){
+                //populating the wi-fi list
                 wifis[i] = (wifiScanList.get(i).SSID);
             }
 
@@ -250,4 +293,7 @@ public class MainActivity extends ActionBarActivity
     }
 
 
+
+
 }
+
