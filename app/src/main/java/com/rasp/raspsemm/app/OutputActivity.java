@@ -15,9 +15,12 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.util.ArrayList;
+import java.util.List;
 
 import android.app.Activity;
 import android.util.Log;
@@ -26,6 +29,14 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.view.View;
+
+import org.apache.http.HttpResponse;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicNameValuePair;
 
 
 public class OutputActivity extends ActionBarActivity {
@@ -47,6 +58,30 @@ public class OutputActivity extends ActionBarActivity {
         Bundle extras = getIntent().getExtras();
         String username = extras.getString("USERNAME");
         String password = extras.getString("PASSWORD");
+
+        HttpClient client = new DefaultHttpClient();
+        HttpPost post = new HttpPost("http://"+serverIpAddress+"/index.php");
+
+        List<NameValuePair> pairs = new ArrayList<NameValuePair>();
+        pairs.add(new BasicNameValuePair("USERNAME", "sandro"));
+        pairs.add(new BasicNameValuePair("PASSWORD", "sandro"));
+
+        try {
+            post.setEntity(new UrlEncodedFormEntity(pairs));
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+
+        Log.v("MAH", post.toString());
+
+        try {
+            HttpResponse response = client.execute(post);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        catch (IllegalStateException e) {
+            e.printStackTrace();
+        }
 
         //Toast.makeText(getBaseContext(), username, Toast.LENGTH_LONG).show();
         //Toast.makeText(getBaseContext(), password, Toast.LENGTH_LONG).show();
