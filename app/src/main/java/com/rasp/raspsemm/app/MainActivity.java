@@ -196,7 +196,7 @@ public class MainActivity extends ActionBarActivity
                         dialog.show();
                 }
                 else {
-                    Toast.makeText(getBaseContext(),"Wifi not correct!",Toast.LENGTH_LONG).show();
+                    Toast.makeText(getBaseContext(),"Wifi not correct!",Toast.LENGTH_SHORT).show();
 
                 }
 

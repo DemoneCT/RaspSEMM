@@ -13,6 +13,35 @@
         android:id="@+id/container"
         android:layout_width="match_parent"
         android:layout_height="match_parent" >
+
+
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+
+            android:clickable="false"
+            android:duplicateParentState="false"
+            android:src="@drawable/raspandroid"
+            android:layout_gravity="center_horizontal|top" />
+
+        <ListView
+            android:id="@+id/listView1"
+            android:layout_width="match_parent"
+            android:layout_height="258dp"
+
+            android:cacheColorHint="#00000000"
+
+            android:drawSelectorOnTop="false"
+
+            android:divider="@android:color/darker_gray"
+            android:dividerHeight="1dp"
+
+            android:background="@android:color/background_dark"
+            android:listSelector="@android:color/transparent"
+            android:layout_gravity="center_horizontal|bottom" />
+
+
     </FrameLayout>
 
     <!-- android:layout_gravity="start" tells DrawerLayout to treat
@@ -23,26 +52,10 @@
     <!-- The drawer is given a fixed width in dp and extends the full height of
          the container. -->
 
-    <ListView
-        android:id="@+id/listView1"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:drawSelectorOnTop="false"
 
-        android:divider="@android:color/darker_gray"
-        android:dividerHeight="1dp"
 
-        android:background="@android:color/background_dark"
-        android:listSelector="@android:color/transparent" />
 
-    <TextView
-        android:id="@+id/list_content"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="New Text"
-        android:layout_gravity="center" />
+
 
     <fragment android:id="@+id/navigation_drawer"
         android:layout_width="@dimen/navigation_drawer_width"
@@ -54,3 +67,6 @@
 
 
 </android.support.v4.widget.DrawerLayout>
+
+    <!--android:layout_alignParentTop="true"
+    android:layout_centerHorizontal="true"-->
