@@ -106,91 +106,86 @@ public class MainActivity extends ActionBarActivity
                 //Toast.makeText(getBaseContext(),str,Toast.LENGTH_SHORT).show();
                 if (str.equals("semm")) {
 
-                    WifiConfiguration wc = new WifiConfiguration();
-                    wc.SSID = "\"semm\"";
-                    wc.preSharedKey  = "\"raspberry\"";
-                    wc.hiddenSSID = true;
-                    wc.status = WifiConfiguration.Status.ENABLED;
+                    //If Network is not already added
 
-                    wc.allowedGroupCiphers.set(WifiConfiguration.GroupCipher.TKIP);
-                    wc.allowedGroupCiphers.set(WifiConfiguration.GroupCipher.CCMP);
-                    wc.allowedKeyManagement.set(WifiConfiguration.KeyMgmt.WPA_PSK);
-                    wc.allowedPairwiseCiphers.set(WifiConfiguration.PairwiseCipher.TKIP);
-                    wc.allowedPairwiseCiphers.set(WifiConfiguration.PairwiseCipher.CCMP);
-                    wc.allowedProtocols.set(WifiConfiguration.Protocol.RSN);
-                        //TO DO If Network is already added
-                    int res = mainWifiObj.addNetwork(wc);
-                    Log.v("WifiPreference", "add Network returned " + res );
-                    boolean b = mainWifiObj.enableNetwork(res, true);
-                    Log.v("WifiPreference", "enableNetwork returned " + b );
+                    if (!WifiNetworkExists()) {
 
-                    if (android.os.Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB) {
-                        // only for honeycomb and older versions
-                        android.provider.Settings.System.putString(getContentResolver(), android.provider.Settings.System.WIFI_USE_STATIC_IP, "1");
-                        android.provider.Settings.System.putString(getContentResolver(), android.provider.Settings.System.WIFI_STATIC_IP, "10.42.0.2");
-                        android.provider.Settings.System.putString(getContentResolver(), android.provider.Settings.System.WIFI_STATIC_NETMASK, "255.255.255.0");
-                        android.provider.Settings.System.putString(getContentResolver(), android.provider.Settings.System.WIFI_STATIC_DNS1, "8.8.8.8");
-                        android.provider.Settings.System.putString(getContentResolver(), android.provider.Settings.System.WIFI_STATIC_GATEWAY, "10.42.0.1");
+                        WifiConfiguration wc = new WifiConfiguration();
+                        wc.SSID = "\"semm\"";
+                        wc.preSharedKey = "\"raspberry\"";
+                        wc.hiddenSSID = true;
+                        wc.status = WifiConfiguration.Status.ENABLED;
+
+                        wc.allowedGroupCiphers.set(WifiConfiguration.GroupCipher.TKIP);
+                        wc.allowedGroupCiphers.set(WifiConfiguration.GroupCipher.CCMP);
+                        wc.allowedKeyManagement.set(WifiConfiguration.KeyMgmt.WPA_PSK);
+                        wc.allowedPairwiseCiphers.set(WifiConfiguration.PairwiseCipher.TKIP);
+                        wc.allowedPairwiseCiphers.set(WifiConfiguration.PairwiseCipher.CCMP);
+                        wc.allowedProtocols.set(WifiConfiguration.Protocol.RSN);
+
+                        int res = mainWifiObj.addNetwork(wc);
+                        Log.v("WifiPreference", "add Network returned " + res);
+                        boolean b = mainWifiObj.enableNetwork(res, true);
+                        Log.v("WifiPreference", "enableNetwork returned " + b);
+
                     }
-                    else {
-                        // TO DO
-                    }
-                    AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-                    LayoutInflater inflater = (MainActivity.this).getLayoutInflater();
-                    Dialog dialog = new Dialog(MainActivity.this);
-                    //dialog.setTitle("LOGIN");
-                    builder.setView(inflater.inflate(R.layout.dialog_signin, null));
-                    builder.setTitle("LOGIN");
 
-
-                    builder.setPositiveButton(R.string.signin, new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int id) {
-                            // User clicked OK button
-
-                            Dialog f = (Dialog) dialog;
-
-                            final EditText us_et = (EditText)f.findViewById(R.id.username);
-                            final EditText pw_et = (EditText)f.findViewById(R.id.password);
-
-                            String us = us_et.getText().toString();
-                            String pw = pw_et.getText().toString();
-
-                            loginIntent.putExtra("USERNAME",us);
-                            loginIntent.putExtra("PASSWORD",pw);
-
-                            startActivity(loginIntent);
-
+                        if (android.os.Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB) {
+                            // only for honeycomb and older versions
+                            android.provider.Settings.System.putString(getContentResolver(), android.provider.Settings.System.WIFI_USE_STATIC_IP, "1");
+                            android.provider.Settings.System.putString(getContentResolver(), android.provider.Settings.System.WIFI_STATIC_IP, "10.42.0.2");
+                            android.provider.Settings.System.putString(getContentResolver(), android.provider.Settings.System.WIFI_STATIC_NETMASK, "255.255.255.0");
+                            android.provider.Settings.System.putString(getContentResolver(), android.provider.Settings.System.WIFI_STATIC_DNS1, "8.8.8.8");
+                            android.provider.Settings.System.putString(getContentResolver(), android.provider.Settings.System.WIFI_STATIC_GATEWAY, "10.42.0.1");
+                        } else {
+                            // TO DO
                         }
-                    });
-                    builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int id) {
-                            // User cancelled the dialog
-                        }
-                    });
-                    dialog = builder.create();
-                    dialog.show();
+                        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+                        LayoutInflater inflater = (MainActivity.this).getLayoutInflater();
+                        Dialog dialog = new Dialog(MainActivity.this);
+                        //dialog.setTitle("LOGIN");
+                        builder.setView(inflater.inflate(R.layout.dialog_signin, null));
+                        builder.setTitle("LOGIN");
 
 
+                        builder.setPositiveButton(R.string.signin, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                // User clicked OK button
 
+                                Dialog f = (Dialog) dialog;
+
+                                final EditText us_et = (EditText) f.findViewById(R.id.username);
+                                final EditText pw_et = (EditText) f.findViewById(R.id.password);
+
+                                String us = us_et.getText().toString();
+                                String pw = pw_et.getText().toString();
+
+                                loginIntent.putExtra("USERNAME", us);
+                                loginIntent.putExtra("PASSWORD", pw);
+
+                                startActivity(loginIntent);
+
+                            }
+                        });
+                        builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                // User cancelled the dialog
+                            }
+                        });
+
+                        dialog = builder.create();
+                        dialog.show();
                 }
                 else {
                     Toast.makeText(getBaseContext(),"Wifi not correct!",Toast.LENGTH_LONG).show();
 
                 }
 
-
-
-
             }
-
-
-
 
         });
 
-
     }
-
 
 
 
@@ -311,6 +306,26 @@ public class MainActivity extends ActionBarActivity
             list.setAdapter(new ArrayAdapter<String>(getApplicationContext(),
                     android.R.layout.simple_list_item_1,wifis));
         }
+    }
+
+
+    boolean WifiNetworkExists () {
+        for (WifiConfiguration config : mainWifiObj.getConfiguredNetworks()) {
+            String newSSID = config.SSID;
+
+            if (config.SSID.equals("\"semm\"")) {
+
+                Log.v("Network " + config.SSID + " already present", "Reconnect...");
+
+                mainWifiObj.disconnect();
+                mainWifiObj.enableNetwork(config.networkId, true);
+                mainWifiObj.reconnect();
+
+                return true;
+            }
+        }
+
+        return false;
     }
 
 
