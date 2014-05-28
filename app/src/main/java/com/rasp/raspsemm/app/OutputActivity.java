@@ -63,11 +63,6 @@ public class OutputActivity extends ActionBarActivity {
         //HttpClient client = new DefaultHttpClient();
         //HttpPost post = new HttpPost("http://"+serverIpAddress+"/index.php");
 
-
-
-        List<NameValuePair> pairs = new ArrayList<NameValuePair>();
-        pairs.add(new BasicNameValuePair("username", username));
-        pairs.add(new BasicNameValuePair("password", password));
         /*
         try {
             post.setEntity(new UrlEncodedFormEntity(pairs));
@@ -87,17 +82,6 @@ public class OutputActivity extends ActionBarActivity {
         }*/
 
 
-        //***JSON***
-        JSONParser jsonParser = new JSONParser();
-        JSONObject json = jsonParser.makeHttpRequest("http://"+serverIpAddress+"/login.php",
-                "GET", pairs);
-        // check log cat from response
-        Log.v("Create Response", json.toString());
-
-
-
-
-
 
 
         //Toast.makeText(getBaseContext(), username, Toast.LENGTH_LONG).show();
@@ -111,11 +95,14 @@ public class OutputActivity extends ActionBarActivity {
             OutputStream out = socket.getOutputStream();
 
             PrintWriter output = new PrintWriter(out);
-            output.println("Hello Android!");
+            //output.println("Hello Android!");
             BufferedReader input = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 
             String st = input.readLine();
-            Toast.makeText(getBaseContext(), st, Toast.LENGTH_LONG).show();
+            //Toast.makeText(getBaseContext(), st, Toast.LENGTH_LONG).show();
+
+
+
             socket.close();
 
             //BufferedReader input = new BufferedReader(new InputStreamReader(s.getInputStream()))

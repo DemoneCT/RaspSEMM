@@ -36,6 +36,11 @@ import android.net.wifi.WifiConfiguration;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import org.apache.http.NameValuePair;
+import org.apache.http.message.BasicNameValuePair;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.net.InetAddress;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
@@ -50,6 +55,10 @@ public class MainActivity extends ActionBarActivity
     WifiScanReceiver wifiReciever;
     ListView list;
     String wifis[];
+
+
+    final String serverIpAddress = "10.42.0.1";
+    private static final String TAG_SUCCESS = "success";
 
 
     Intent loginIntent;
@@ -87,7 +96,7 @@ public class MainActivity extends ActionBarActivity
         // Check for wifi is disabled
         if (mainWifiObj.isWifiEnabled() == false) {
             // If wifi disabled then enable it
-            Toast.makeText(getApplicationContext(), "Wi-fi is disabled..making it enabled", Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), "Wi-fi is disabled...making it enabled", Toast.LENGTH_LONG).show();
 
             mainWifiObj.setWifiEnabled(true);
         }
@@ -179,10 +188,42 @@ public class MainActivity extends ActionBarActivity
                                 String us = us_et.getText().toString();
                                 String pw = pw_et.getText().toString();
 
-                                loginIntent.putExtra("username", us);
-                                loginIntent.putExtra("password", pw);
 
-                                startActivity(loginIntent);
+                                //TO DO Controllo sulle credenziali
+
+
+                                List<NameValuePair> pairs = new ArrayList<NameValuePair>();
+                                pairs.add(new BasicNameValuePair("username", us));
+                                pairs.add(new BasicNameValuePair("password", pw));
+
+
+
+                                //***JSON***
+                                JSONParser jsonParser = new JSONParser();
+                                JSONObject json = jsonParser.makeHttpRequest("http://"+serverIpAddress+"/login.php",
+                                        "GET", pairs);
+                                // check log cat from response
+                                Log.v("Create Response", json.toString());
+
+
+                                try {
+                                    if(json.getInt(TAG_SUCCESS)==1) {
+
+
+                                        loginIntent.putExtra("username", us);
+                                        loginIntent.putExtra("password", pw);
+
+                                        startActivity(loginIntent);
+
+                                    }
+                                    else {
+
+                                        Toast.makeText(getBaseContext(),"User or Password incorrect!",Toast.LENGTH_LONG).show();
+
+                                    }
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
 
                             }
                         });
@@ -196,7 +237,7 @@ public class MainActivity extends ActionBarActivity
                         dialog.show();
                 }
                 else {
-                    Toast.makeText(getBaseContext(),"Wifi not correct!",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getBaseContext(),"Wifi network not correct!",Toast.LENGTH_SHORT).show();
 
                 }
 
