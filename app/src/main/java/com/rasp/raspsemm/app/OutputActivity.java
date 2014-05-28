@@ -46,7 +46,7 @@ public class OutputActivity extends ActionBarActivity {
 
 
     //private Button bt;
-    private TextView tv;
+    private TextView tv,tv2;
     private Socket socket;
     private String serverIpAddress = "10.42.0.1";
     private static final int REDIRECTED_SERVERPORT = 5002;
@@ -100,6 +100,8 @@ public class OutputActivity extends ActionBarActivity {
 
             String st = input.readLine();
             //Toast.makeText(getBaseContext(), st, Toast.LENGTH_LONG).show();
+            tv2=(TextView)findViewById(R.id.textView);
+            tv2.setText(st);
 
 
 
