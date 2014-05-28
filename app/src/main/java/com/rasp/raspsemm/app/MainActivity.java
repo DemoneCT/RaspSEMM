@@ -179,8 +179,8 @@ public class MainActivity extends ActionBarActivity
                                 String us = us_et.getText().toString();
                                 String pw = pw_et.getText().toString();
 
-                                loginIntent.putExtra("USERNAME", us);
-                                loginIntent.putExtra("PASSWORD", pw);
+                                loginIntent.putExtra("username", us);
+                                loginIntent.putExtra("password", pw);
 
                                 startActivity(loginIntent);
 

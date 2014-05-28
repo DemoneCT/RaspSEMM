@@ -37,6 +37,7 @@ import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
+import org.json.JSONObject;
 
 
 public class OutputActivity extends ActionBarActivity {
@@ -56,16 +57,18 @@ public class OutputActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_output);
         Bundle extras = getIntent().getExtras();
-        String username = extras.getString("USERNAME");
-        String password = extras.getString("PASSWORD");
+        String username = extras.getString("username");
+        String password = extras.getString("password");
 
-        HttpClient client = new DefaultHttpClient();
-        HttpPost post = new HttpPost("http://"+serverIpAddress+"/index.php");
+        //HttpClient client = new DefaultHttpClient();
+        //HttpPost post = new HttpPost("http://"+serverIpAddress+"/index.php");
+
+
 
         List<NameValuePair> pairs = new ArrayList<NameValuePair>();
-        pairs.add(new BasicNameValuePair("USERNAME", "sandro"));
-        pairs.add(new BasicNameValuePair("PASSWORD", "sandro"));
-
+        pairs.add(new BasicNameValuePair("username", username));
+        pairs.add(new BasicNameValuePair("password", password));
+        /*
         try {
             post.setEntity(new UrlEncodedFormEntity(pairs));
         } catch (UnsupportedEncodingException e) {
@@ -81,7 +84,21 @@ public class OutputActivity extends ActionBarActivity {
         }
         catch (IllegalStateException e) {
             e.printStackTrace();
-        }
+        }*/
+
+
+        //***JSON***
+        JSONParser jsonParser = new JSONParser();
+        JSONObject json = jsonParser.makeHttpRequest("http://"+serverIpAddress+"/login.php",
+                "GET", pairs);
+        // check log cat from response
+        Log.v("Create Response", json.toString());
+
+
+
+
+
+
 
         //Toast.makeText(getBaseContext(), username, Toast.LENGTH_LONG).show();
         //Toast.makeText(getBaseContext(), password, Toast.LENGTH_LONG).show();
