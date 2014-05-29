@@ -58,6 +58,7 @@ public class OutputActivity extends ActionBarActivity
     private Button bt;
     private Socket socket;
     private String value;
+
     private String serverIpAddress = "10.42.0.1";
     private static final int REDIRECTED_SERVERPORT = 5002;
 
