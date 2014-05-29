@@ -49,7 +49,7 @@ public class LogActivity extends ActionBarActivity {
         JSONObject json = jsonParser.makeHttpRequest("http://"+serverIpAddress+"/read.php",
                 "GET", pairs);
 
-        // check log cat from response
+        // Check log cat from response
         Log.v("LOG Response", json.toString());
 
 

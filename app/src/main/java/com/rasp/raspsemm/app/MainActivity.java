@@ -78,9 +78,9 @@ public class MainActivity extends ActionBarActivity
 
         loginIntent = new Intent(this, OutputActivity.class);
 
-        // Check for wifi is disabled
+        // Check for WiFi is disabled
         if (mainWifiObj.isWifiEnabled() == false) {
-            // If wifi disabled then enable it
+            // If WiFi disabled then enable it
             Toast.makeText(getApplicationContext(), "Wi-fi is disabled...making it enabled", Toast.LENGTH_LONG).show();
 
             mainWifiObj.setWifiEnabled(true);
@@ -97,7 +97,6 @@ public class MainActivity extends ActionBarActivity
 
                 Object o = list.getItemAtPosition(position);
                 String str=(String)o;
-                //Toast.makeText(getBaseContext(),str,Toast.LENGTH_SHORT).show();
                 if (str.equals("semm")) {
 
                     //If Network is not already added
@@ -135,7 +134,7 @@ public class MainActivity extends ActionBarActivity
 
                         if (android.os.Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB) {
 
-                            // only for Honeycomb and older versions
+                            // Only for Honeycomb and older versions
                             android.provider.Settings.System.putString(getContentResolver(), android.provider.Settings.System.WIFI_USE_STATIC_IP, "1");
                             android.provider.Settings.System.putString(getContentResolver(), android.provider.Settings.System.WIFI_STATIC_IP, "10.42.0.2");
                             android.provider.Settings.System.putString(getContentResolver(), android.provider.Settings.System.WIFI_STATIC_NETMASK, "255.255.255.0");
@@ -182,7 +181,7 @@ public class MainActivity extends ActionBarActivity
                                 JSONObject json = jsonParser.makeHttpRequest("http://"+serverIpAddress+"/login.php",
                                         "GET", pairs);
 
-                                // check log cat from response
+                                // Check log cat from response
                                 Log.v("Login Response", json.toString());
 
                                 try {
