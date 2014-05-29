@@ -1,8 +1,5 @@
 package com.rasp.raspsemm.app;
 
-/**
- * Created by root on 27/05/14.
- */
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -35,7 +32,7 @@ public class JSONParser {
 
     }
 
-    // function get json from url
+    // Function get json from url
     // by making HTTP POST or GET mehtod
     public JSONObject makeHttpRequest(String url, String method,
                                       List<NameValuePair> params) {
@@ -43,10 +40,10 @@ public class JSONParser {
         // Making HTTP request
         try {
 
-            // check for request method
+            // Check for request method
             if(method.equals("POST")){
 
-                // request method is POST
+                // Request method is POST
                 // defaultHttpClient
                 DefaultHttpClient httpClient = new DefaultHttpClient();
                 HttpPost httpPost = new HttpPost(url);
@@ -57,7 +54,7 @@ public class JSONParser {
                 is = httpEntity.getContent();
 
             }else if(method.equals("GET")){
-                // request method is GET
+                // Request method is GET
                 DefaultHttpClient httpClient = new DefaultHttpClient();
                 String paramString = URLEncodedUtils.format(params, "utf-8");
                 url += "?" + paramString;
@@ -90,16 +87,14 @@ public class JSONParser {
             Log.e("Buffer Error", "Error converting result " + e.toString());
         }
 
-        // try parse the string to a JSON object
+        // Try parse the string to a JSON object
         try {
             jObj = new JSONObject(json);
         } catch (JSONException e) {
             Log.e("JSON Parser", "Error parsing data " + e.toString());
         }
 
-        // return JSON String
+        // Return JSON String
         return jObj;
-
-
     }
 }

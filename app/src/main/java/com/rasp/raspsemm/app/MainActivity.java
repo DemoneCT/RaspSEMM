@@ -143,12 +143,10 @@ public class MainActivity extends ActionBarActivity
 
                         }
 
-
                         int res = mainWifiObj.addNetwork(wc);
                         Log.v("WifiPreference", "add Network returned " + res);
                         boolean b = mainWifiObj.enableNetwork(res, true);
                         Log.v("WifiPreference", "enableNetwork returned " + b);
-
 
                     }
 
@@ -163,12 +161,10 @@ public class MainActivity extends ActionBarActivity
                         builder.setPositiveButton(R.string.signin, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
                                 // User clicked OK button
-
                                 Dialog f = (Dialog) dialog;
 
                                 final EditText us_et = (EditText) f.findViewById(R.id.username);
                                 final EditText pw_et = (EditText) f.findViewById(R.id.password);
-
                                 String us = us_et.getText().toString();
                                 String pw = pw_et.getText().toString();
 
@@ -181,7 +177,7 @@ public class MainActivity extends ActionBarActivity
                                 JSONObject json = jsonParser.makeHttpRequest("http://"+serverIpAddress+"/login.php",
                                         "GET", pairs);
 
-                                // Check log cat from response
+                                // Check log cat console from response
                                 Log.v("Login Response", json.toString());
 
                                 try {
@@ -195,9 +191,7 @@ public class MainActivity extends ActionBarActivity
 
                                     }
                                     else {
-
                                         Toast.makeText(getBaseContext(),"User or Password incorrect!",Toast.LENGTH_LONG).show();
-
                                     }
                                 } catch (JSONException e) {
                                     e.printStackTrace();
@@ -218,14 +212,10 @@ public class MainActivity extends ActionBarActivity
                     Toast.makeText(getBaseContext(),"Wifi network not correct!",Toast.LENGTH_SHORT).show();
 
                 }
-
             }
 
         });
-
     }
-
-
 
     protected void onPause() {
         unregisterReceiver(wifiReciever);
@@ -236,8 +226,6 @@ public class MainActivity extends ActionBarActivity
         registerReceiver(wifiReciever, new IntentFilter(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION));
         super.onResume();
     }
-
-
 
     class WifiScanReceiver extends BroadcastReceiver {
         @SuppressLint("UseValueOf")
@@ -361,16 +349,6 @@ public class MainActivity extends ActionBarActivity
         }
         return super.onOptionsItemSelected(item);
     }
-
-
-
-
-
-
-
-
-
-
 
 }
 

@@ -49,9 +49,8 @@ public class LogActivity extends ActionBarActivity {
         JSONObject json = jsonParser.makeHttpRequest("http://"+serverIpAddress+"/read.php",
                 "GET", pairs);
 
-        // Check log cat from response
+        // Check log cat console from response
         Log.v("LOG Response", json.toString());
-
 
         measuresList = new ArrayList<HashMap<String, String>>();
 
@@ -72,14 +71,10 @@ public class LogActivity extends ActionBarActivity {
                 ListAdapter adapter = new SimpleAdapter(getApplicationContext(), measuresList, R.layout.list_item,
                         new String[]{"value","date"}, new int[]{R.id.value, R.id.date});
                 loglist.setAdapter(adapter);
-
             }
-
         } catch (JSONException e) {
             e.printStackTrace();
         }
-
-
     }
 
 
