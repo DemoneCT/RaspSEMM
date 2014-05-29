@@ -27,6 +27,7 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.StringTokenizer;
 
 import android.app.Activity;
 import android.util.Log;
@@ -50,17 +51,17 @@ import org.json.JSONObject;
 
 
 
-public class OutputActivity extends ActionBarActivity implements NavigationDrawerFragment.NavigationDrawerCallbacks  {
+public class OutputActivity extends ActionBarActivity
+        implements NavigationDrawerFragment.NavigationDrawerCallbacks  {
 
-    //Intent intent = getIntent();
-
-
-    //private Button bt;
     private TextView tv;
+    private Button bt;
     private Socket socket;
+    private String value;
     private String serverIpAddress = "10.42.0.1";
     private static final int REDIRECTED_SERVERPORT = 5002;
 
+    Intent logIntent;
 
     /**
      * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
@@ -87,42 +88,9 @@ public class OutputActivity extends ActionBarActivity implements NavigationDrawe
                 R.id.navigation_drawer,
                 (DrawerLayout) findViewById(R.id.drawer_layout));
 
+        logIntent = new Intent(this, LogActivity.class);
 
-
-
-        Bundle extras = getIntent().getExtras();
-        String username = extras.getString("username");
-        String password = extras.getString("password");
-
-        //HttpClient client = new DefaultHttpClient();
-        //HttpPost post = new HttpPost("http://"+serverIpAddress+"/index.php");
-
-        /*
-        try {
-            post.setEntity(new UrlEncodedFormEntity(pairs));
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
-
-        Log.v("MAH", post.toString());
-
-        try {
-            HttpResponse response = client.execute(post);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        catch (IllegalStateException e) {
-            e.printStackTrace();
-        }*/
-
-
-
-
-        //Toast.makeText(getBaseContext(), username, Toast.LENGTH_LONG).show();
-        //Toast.makeText(getBaseContext(), password, Toast.LENGTH_LONG).show();
-
-        //bt = (Button) findViewById(R.id.myButton);
-
+        // ***SOCKET***
         try {
             InetAddress serverAddr = InetAddress.getByName(serverIpAddress);
             socket = new Socket(serverAddr, REDIRECTED_SERVERPORT);
@@ -132,12 +100,9 @@ public class OutputActivity extends ActionBarActivity implements NavigationDrawe
             //output.println("Hello Android!");
             BufferedReader input = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 
-            String st = input.readLine();
-            //Toast.makeText(getBaseContext(), st, Toast.LENGTH_LONG).show();
+            value = input.readLine();
             tv=(TextView)findViewById(R.id.textView);
-            tv.setText(st);
-
-
+            tv.setText(value);
 
             socket.close();
 
@@ -149,6 +114,30 @@ public class OutputActivity extends ActionBarActivity implements NavigationDrawe
         } catch (IOException e1) {
             e1.printStackTrace();
         }
+        Bundle extras = getIntent().getExtras();
+        final String id_users = extras.getString("id_users");
+
+        bt = (Button) findViewById(R.id.button);
+        bt.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+
+                List<NameValuePair> pairs = new ArrayList<NameValuePair>();
+                pairs.add(new BasicNameValuePair("id_users", id_users));
+                pairs.add(new BasicNameValuePair("value", value));
+
+                //***JSON***
+                JSONParser jsonParser = new JSONParser();
+                JSONObject json = jsonParser.makeHttpRequest("http://" + serverIpAddress + "/create.php",
+                        "GET", pairs);
+
+                Log.v("Create Record Response", json.toString());
+;
+                logIntent.putExtra("id_users", id_users);
+                startActivity(logIntent);
+
+
+            }
+        });
 
     }
 

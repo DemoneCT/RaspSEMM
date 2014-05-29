@@ -173,31 +173,25 @@ public class MainActivity extends ActionBarActivity
                                 String us = us_et.getText().toString();
                                 String pw = pw_et.getText().toString();
 
-
-                                //TO DO Controllo sulle credenziali
-
-
                                 List<NameValuePair> pairs = new ArrayList<NameValuePair>();
                                 pairs.add(new BasicNameValuePair("username", us));
                                 pairs.add(new BasicNameValuePair("password", pw));
-
-
 
                                 //***JSON***
                                 JSONParser jsonParser = new JSONParser();
                                 JSONObject json = jsonParser.makeHttpRequest("http://"+serverIpAddress+"/login.php",
                                         "GET", pairs);
-                                // check log cat from response
-                                Log.v("Create Response", json.toString());
 
+                                // check log cat from response
+                                Log.v("Login Response", json.toString());
 
                                 try {
                                     if(json.getInt(TAG_SUCCESS)==1) {
 
-
+                                        String id_users = json.getString("id");
                                         loginIntent.putExtra("username", us);
                                         loginIntent.putExtra("password", pw);
-
+                                        loginIntent.putExtra("id_users", id_users);
                                         startActivity(loginIntent);
 
                                     }
@@ -252,8 +246,10 @@ public class MainActivity extends ActionBarActivity
             List<ScanResult> wifiScanList = mainWifiObj.getScanResults();
             wifis = new String[wifiScanList.size()];
             for(int i = 0; i < wifiScanList.size(); i++){
-                //populating the wi-fi list
+
+                //Populating the WiFi network list
                 wifis[i] = (wifiScanList.get(i).SSID);
+
             }
 
             list.setAdapter(new ArrayAdapter<String>(getApplicationContext(),
