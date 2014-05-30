@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
+import android.os.StrictMode;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBar;
 import android.support.v4.app.Fragment;
@@ -161,6 +162,14 @@ public class MainActivity extends ActionBarActivity
                         builder.setPositiveButton(R.string.signin, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
                                 // User clicked OK button
+
+                                //For issue android.os.NetworkOnMainThreadException
+                                if (android.os.Build.VERSION.SDK_INT > Build.VERSION_CODES.HONEYCOMB) {
+                                StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder()
+                                        .permitAll().build();
+                                StrictMode.setThreadPolicy(policy);
+                                }
+
                                 Dialog f = (Dialog) dialog;
 
                                 final EditText us_et = (EditText) f.findViewById(R.id.username);

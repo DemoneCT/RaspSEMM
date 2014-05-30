@@ -16,8 +16,8 @@
 
 
         <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="181dp"
+            android:layout_height="85dp"
             android:text="SAVE DATA"
             android:id="@+id/button"
             android:layout_gravity="center_horizontal|bottom" />

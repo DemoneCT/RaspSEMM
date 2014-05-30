@@ -3,6 +3,8 @@ package com.rasp.raspsemm.app;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Build;
+import android.os.StrictMode;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
@@ -122,6 +124,12 @@ public class OutputActivity extends ActionBarActivity
         bt.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
 
+                //For issue android.os.NetworkOnMainThreadException
+                if (android.os.Build.VERSION.SDK_INT > Build.VERSION_CODES.HONEYCOMB) {
+                    StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder()
+                            .permitAll().build();
+                    StrictMode.setThreadPolicy(policy);
+                }
                 List<NameValuePair> pairs = new ArrayList<NameValuePair>();
                 pairs.add(new BasicNameValuePair("id_users", id_users));
                 pairs.add(new BasicNameValuePair("value", value));
