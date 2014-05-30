@@ -1,5 +1,7 @@
 package com.rasp.raspsemm.app;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.app.Activity;
@@ -23,6 +25,13 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
+
+import org.apache.http.NameValuePair;
+import org.apache.http.message.BasicNameValuePair;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Fragment used for managing interactions for and presentation of a navigation drawer.
@@ -59,6 +68,8 @@ public class NavigationDrawerFragment extends Fragment {
     private int mCurrentSelectedPosition = 0;
     private boolean mFromSavedInstanceState;
     private boolean mUserLearnedDrawer;
+
+    private String serverIpAddress = "10.42.0.1";
 
     public NavigationDrawerFragment() {
     }
@@ -189,8 +200,11 @@ public class NavigationDrawerFragment extends Fragment {
         mDrawerLayout.setDrawerListener(mDrawerToggle);
     }
 
+
+
     private void selectItem(int position) {
         mCurrentSelectedPosition = position;
+
         if (mDrawerListView != null) {
             mDrawerListView.setItemChecked(position, true);
         }
@@ -199,6 +213,60 @@ public class NavigationDrawerFragment extends Fragment {
         }
         if (mCallbacks != null) {
             mCallbacks.onNavigationDrawerItemSelected(position);
+        }
+
+        Intent i1,i2;
+
+        switch (position) {
+
+            case 0:
+                /*
+                i1=new Intent(getActivity(), LogActivity.class);
+                Bundle extras = getIntent().getExtras();
+                final String id_users = extras.getString("id_users");
+
+                List<NameValuePair> pairs = new ArrayList<NameValuePair>();
+                pairs.add(new BasicNameValuePair("id_users", id_users));
+                pairs.add(new BasicNameValuePair("value", value));
+
+                //***JSON***
+                JSONParser jsonParser = new JSONParser();
+                JSONObject json = jsonParser.makeHttpRequest("http://" + serverIpAddress + "/create.php",
+                        "GET", pairs);
+
+                Log.v("Create Record Response", json.toString());
+
+                i1.putExtra("id_users", id_users);
+
+                startActivity(i1);
+                */
+                break;
+
+            case 1:
+                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                builder.setCancelable(false);
+                builder.setMessage("Do you really want to log out?");
+                builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        //If user pressed "yes", then he is allowed to logout from application
+                        getActivity().finish();
+                        Intent i2=new Intent(getActivity(), MainActivity.class);
+                        startActivity(i2);
+                    }
+                });
+                builder.setNegativeButton("No",new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        //If user select "No", just cancel this dialog and continue with app
+                        dialog.cancel();
+                    }
+                });
+                AlertDialog alert=builder.create();
+                alert.show();
+                break;
+            default:
+                break;
         }
     }
 
@@ -249,14 +317,16 @@ public class NavigationDrawerFragment extends Fragment {
             return true;
         }
 
-        if (item.getItemId() == R.id.action_example) {
+        /*if (item.getItemId() == R.id.action_example) {
             Toast.makeText(getActivity(), "Example action.", Toast.LENGTH_SHORT).show();
             return true;
-        }
+        }*/
 
 
         return super.onOptionsItemSelected(item);
     }
+
+
 
     /**
      * Per the navigation drawer design guidelines, updates the action bar to show the global app
@@ -283,5 +353,15 @@ public class NavigationDrawerFragment extends Fragment {
          */
         void onNavigationDrawerItemSelected(int position);
     }
+
+    /* The click listner for ListView in the navigation drawer */
+    private class DrawerItemClickListener implements ListView.OnItemClickListener {
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            selectItem(position);
+        }
+    }
+
+
 
 }
