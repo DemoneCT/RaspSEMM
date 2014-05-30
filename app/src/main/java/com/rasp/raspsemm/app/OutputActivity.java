@@ -1,5 +1,7 @@
 package com.rasp.raspsemm.app;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -95,10 +97,8 @@ public class OutputActivity extends ActionBarActivity
         try {
             InetAddress serverAddr = InetAddress.getByName(serverIpAddress);
             socket = new Socket(serverAddr, REDIRECTED_SERVERPORT);
-            OutputStream out = socket.getOutputStream();
-
-            PrintWriter output = new PrintWriter(out);
-            //output.println("Hello Android!");
+            //OutputStream out = socket.getOutputStream();
+            //PrintWriter output = new PrintWriter(out);
             BufferedReader input = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 
             value = input.readLine();
@@ -159,9 +159,6 @@ public class OutputActivity extends ActionBarActivity
             case 2:
                 mTitle = getString(R.string.title_section2);
                 break;
-            case 3:
-                mTitle = getString(R.string.title_section3);
-                break;
         }
     }
 
@@ -172,6 +169,8 @@ public class OutputActivity extends ActionBarActivity
         actionBar.setTitle(mTitle);
     }
 
+    /*
+    This function enabled the action bar with the button
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -185,6 +184,7 @@ public class OutputActivity extends ActionBarActivity
         }
         return super.onCreateOptionsMenu(menu);
     }
+    */
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -236,6 +236,27 @@ public class OutputActivity extends ActionBarActivity
         }
     }
 
-
+    @Override
+    public void onBackPressed() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setCancelable(false);
+        builder.setMessage("Do you really want to log out?");
+        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                //if user pressed "yes", then he is allowed to exit from application
+                finish();
+            }
+        });
+        builder.setNegativeButton("No",new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                //if user select "No", just cancel this dialog and continue with app
+                dialog.cancel();
+            }
+        });
+        AlertDialog alert=builder.create();
+        alert.show();
+    }
 
 }
