@@ -2,8 +2,9 @@
 <resources>
 
     <string name="app_name">SEMM</string>
-    <string name="title_section1">User Log</string>
-    <string name="title_section2">Logout</string>
+    <string name="title_section1">Home</string>
+    <string name="title_section2">User Log</string>
+    <string name="title_section3">Logout</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="action_example">Save data</string>

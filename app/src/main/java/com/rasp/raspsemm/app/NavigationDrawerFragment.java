@@ -3,6 +3,8 @@ package com.rasp.raspsemm.app;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Build;
+import android.os.StrictMode;
 import android.support.v7.app.ActionBarActivity;
 import android.app.Activity;
 import android.support.v7.app.ActionBar;
@@ -117,6 +119,7 @@ public class NavigationDrawerFragment extends Fragment {
                 new String[]{
                         getString(R.string.title_section1),
                         getString(R.string.title_section2),
+                        getString(R.string.title_section3),
                 }));
         mDrawerListView.setItemChecked(mCurrentSelectedPosition, true);
         return mDrawerListView;
@@ -205,6 +208,7 @@ public class NavigationDrawerFragment extends Fragment {
     private void selectItem(int position) {
         mCurrentSelectedPosition = position;
 
+
         if (mDrawerListView != null) {
             mDrawerListView.setItemChecked(position, true);
         }
@@ -215,23 +219,31 @@ public class NavigationDrawerFragment extends Fragment {
             mCallbacks.onNavigationDrawerItemSelected(position);
         }
 
-        Intent i1,i2;
-
         switch (position) {
 
-            case 0:
-                /*
-                i1=new Intent(getActivity(), LogActivity.class);
-                Bundle extras = getIntent().getExtras();
+            case 0: {
+                break;
+            }
+
+            case 1: {
+
+                Intent i1 = new Intent(getActivity(), LogActivity.class);
+                Bundle extras = getActivity().getIntent().getExtras();
                 final String id_users = extras.getString("id_users");
 
                 List<NameValuePair> pairs = new ArrayList<NameValuePair>();
                 pairs.add(new BasicNameValuePair("id_users", id_users));
-                pairs.add(new BasicNameValuePair("value", value));
+
+                //For issue android.os.NetworkOnMainThreadException
+                if (android.os.Build.VERSION.SDK_INT > Build.VERSION_CODES.HONEYCOMB) {
+                    StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder()
+                            .permitAll().build();
+                    StrictMode.setThreadPolicy(policy);
+                }
 
                 //***JSON***
                 JSONParser jsonParser = new JSONParser();
-                JSONObject json = jsonParser.makeHttpRequest("http://" + serverIpAddress + "/create.php",
+                JSONObject json = jsonParser.makeHttpRequest("http://" + serverIpAddress + "/read.php",
                         "GET", pairs);
 
                 Log.v("Create Record Response", json.toString());
@@ -239,10 +251,13 @@ public class NavigationDrawerFragment extends Fragment {
                 i1.putExtra("id_users", id_users);
 
                 startActivity(i1);
-                */
-                break;
 
-            case 1:
+                break;
+            }
+
+            case 2:
+
+            {
                 AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
                 builder.setCancelable(false);
                 builder.setMessage("Do you really want to log out?");
@@ -251,22 +266,26 @@ public class NavigationDrawerFragment extends Fragment {
                     public void onClick(DialogInterface dialog, int which) {
                         //If user pressed "yes", then he is allowed to logout from application
                         getActivity().finish();
-                        Intent i2=new Intent(getActivity(), MainActivity.class);
+                        Intent i2 = new Intent(getActivity(), MainActivity.class);
                         startActivity(i2);
                     }
                 });
-                builder.setNegativeButton("No",new DialogInterface.OnClickListener() {
+                builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         //If user select "No", just cancel this dialog and continue with app
                         dialog.cancel();
                     }
                 });
-                AlertDialog alert=builder.create();
+                AlertDialog alert = builder.create();
                 alert.show();
                 break;
-            default:
+
+            }
+            default: {
                 break;
+            }
+
         }
     }
 
