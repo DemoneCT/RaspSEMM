@@ -32,6 +32,8 @@ import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import android.app.Activity;
 import android.util.Log;
@@ -103,15 +105,43 @@ public class OutputActivity extends ActionBarActivity
             //PrintWriter output = new PrintWriter(out);
             BufferedReader input = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 
-            value = input.readLine();
+            String line = null, tmp;
+
+            //Reading a last line of a sensor's input
+            while  ((tmp = input.readLine()) != null)
+            {
+
+                line = tmp;
+            }
+
+            Log.v ("VALUE = ", line);
+
+            //Parse the string using regular expression
+
+            String newString = null;
+
+            Pattern p = Pattern.compile("((,\\s*)?'([a-zA-Z_0-9])'((,\\s*)?'([a-zA-Z_0-9])')+)((,\\s*)?'\\\\r)+");
+            Matcher m = p.matcher(line);
+            while(m.find())
+            {
+                // extract the value from the string
+                newString = m.group(1).replaceAll("[,' ]", "");
+            }
+
+            value = newString;
+
+            //value = input.readLine();
+
             tv=(TextView)findViewById(R.id.textView);
             tv.setText(value);
+            //Log.v(value, value);
+
 
             socket.close();
 
             //BufferedReader input = new BufferedReader(new InputStreamReader(s.getInputStream()))
             //PrintWriter out = new PrintWriter(new BufferedWriter(new OutputStreamWriter(socket.getOutputStream())),true);
-            //out.println(username);
+
         } catch (UnknownHostException e1) {
             e1.printStackTrace();
         } catch (IOException e1) {
