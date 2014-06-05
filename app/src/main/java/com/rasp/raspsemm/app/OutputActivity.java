@@ -120,7 +120,7 @@ public class OutputActivity extends ActionBarActivity
 
             String newString = null;
 
-            Pattern p = Pattern.compile("((,\\s*)?'([a-zA-Z_0-9])'((,\\s*)?'([a-zA-Z_0-9])')+)((,\\s*)?'\\\\r)+");
+            Pattern p = Pattern.compile("(((,\\s*)?'([a-zA-Z_0-9])+')*((,\\s*)?'(\\.*)')*((,\\s*)?'([a-zA-Z_0-9])')+)((,\\s*)?'\\\\r)+");
             Matcher m = p.matcher(line);
             while(m.find())
             {
