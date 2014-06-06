@@ -15,13 +15,6 @@
         android:layout_height="match_parent" >
 
 
-        <Button
-            android:layout_width="181dp"
-            android:layout_height="85dp"
-            android:text="SAVE DATA"
-            android:id="@+id/button"
-            android:layout_gravity="center_horizontal|bottom" />
-
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -30,6 +23,20 @@
             android:layout_marginTop="131dp"
             android:textSize="100sp"
             android:layout_gravity="center_horizontal|top" />
+
+        <Button
+            android:layout_width="181dp"
+            android:layout_height="85dp"
+            android:text="SAVE DATA"
+            android:id="@+id/button"
+            android:layout_gravity="left|bottom" />
+
+        <Button
+            android:layout_width="181dp"
+            android:layout_height="85dp"
+            android:text="SEND E-MAIL"
+            android:id="@+id/button2"
+            android:layout_gravity="right|bottom" />
 
 
     </FrameLayout>

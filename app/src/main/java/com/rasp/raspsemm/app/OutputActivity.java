@@ -1,8 +1,15 @@
 package com.rasp.raspsemm.app;
 
 import android.app.AlertDialog;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.net.Uri;
+import android.net.wifi.SupplicantState;
+import android.net.wifi.WifiConfiguration;
+import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.os.StrictMode;
 import android.support.v4.app.Fragment;
@@ -61,7 +68,7 @@ public class OutputActivity extends ActionBarActivity
         implements NavigationDrawerFragment.NavigationDrawerCallbacks  {
 
     private TextView tv;
-    private Button bt;
+    private Button bt,bt2;
     private Socket socket;
     private String value;
 
@@ -69,6 +76,8 @@ public class OutputActivity extends ActionBarActivity
     private static final int REDIRECTED_SERVERPORT = 5002;
 
     Intent logIntent;
+    WifiManager wifiMan;
+    WifiConfiguration wifiConf;
 
     /**
      * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
@@ -96,6 +105,10 @@ public class OutputActivity extends ActionBarActivity
                 (DrawerLayout) findViewById(R.id.drawer_layout));
 
         logIntent = new Intent(this, LogActivity.class);
+
+
+
+
 
         // ***SOCKET***
         try {
@@ -129,6 +142,7 @@ public class OutputActivity extends ActionBarActivity
             }
 
             value = newString;
+
 
             //value = input.readLine();
 
@@ -169,10 +183,38 @@ public class OutputActivity extends ActionBarActivity
                 JSONObject json = jsonParser.makeHttpRequest("http://" + serverIpAddress + "/create.php",
                         "GET", pairs);
 
+                Toast.makeText(getBaseContext(),"Value "+value+" successfully saved on DB!",Toast.LENGTH_LONG).show();
                 Log.v("Create Record Response", json.toString());
-;
+
                 logIntent.putExtra("id_users", id_users);
                 startActivity(logIntent);
+
+
+            }
+        });
+
+        bt2 = (Button) findViewById(R.id.button2);
+        bt2.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+
+                wifiMan = (WifiManager) getSystemService(Context.WIFI_SERVICE);
+
+
+                wifiMan.disconnect();
+
+                android.provider.Settings.System.putString(getContentResolver(), android.provider.Settings.System.WIFI_USE_STATIC_IP, "0");
+                DisconnectWiFi discon = new DisconnectWiFi();
+                registerReceiver(discon, new IntentFilter(WifiManager.SUPPLICANT_STATE_CHANGED_ACTION));
+
+
+                Intent send = new Intent(Intent.ACTION_SENDTO);
+                String uriText = "mailto:" + Uri.encode("sandro.cesnik@gmail.com") +
+                        "?subject=" + Uri.encode("Value measure") +
+                        "&body=" + Uri.encode("The hemoglobin value measured is: "+value);
+                Uri uri = Uri.parse(uriText);
+
+                send.setData(uri);
+                startActivity(Intent.createChooser(send, "Send mail..."));
 
 
             }
@@ -301,4 +343,16 @@ public class OutputActivity extends ActionBarActivity
         alert.show();
     }
 
+    public class DisconnectWiFi extends BroadcastReceiver {
+
+        @Override
+        public void onReceive(Context c, Intent intent) {
+            if(!intent.getParcelableExtra(wifiMan.EXTRA_NEW_STATE).toString().equals(SupplicantState.SCANNING)) wifiMan.disconnect();
+
+        }
+
+    }
+
+
 }
+
